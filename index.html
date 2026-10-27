@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MY TVET Dashboard</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #0b1f45;
+      --navy-dark:   #060e25;
+      --navy-mid:    #142a5e;
+      --blue:        #1a6fdb;
+      --blue-light:  #e8f0fb;
+      --teal:        #0ea5a0;
+      --teal-light:  #e0f7f6;
+      --purple:      #7c3aed;
+      --purple-light:#ede9fe;
+      --amber:       #d97706;
+      --amber-light: #fef3c7;
+      --yellow:      #f1c21b;
+      --yellow-bg:   #fdf6d8;
+      --green:       #16a34a;
+      --green-light: #dcfce7;
+      --green-bg:    #d4edda;
+      --red:         #dc2626;
+      --bg:          #eef1f7;
+      --surface:     #ffffff;
+      --border:      #dde3ee;
+      --text:        #0f172a;
+      --muted:       #64748b;
+      --shadow:      0 4px 16px rgba(11,31,69,.10);
+      --radius:      14px;
+    }
+
+    body {
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ───────────────────────────────────────────── */
+    header {
+      background: linear-gradient(120deg, var(--navy-dark) 0%, var(--navy-mid) 55%, #1e3a8a 100%);
+      color: #fff;
+      padding: 28px 36px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 3px solid #2563eb;
+    }
+
+    header .header-left h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: .6px;
+      background: linear-gradient(90deg, #93c5fd, #c4b5fd, #86efac);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header .header-left p {
+      font-size: .9rem;
+      color: #93b8e0;
+      margin-top: 3px;
+    }
+
+    header .header-right { text-align: right; }
+
+    header .header-right .date-label {
+      font-size: .72rem;
+      color: #6b8fb5;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    header .header-right .date-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #bfdbfe;
+      margin-top: 2px;
+    }
+
+    /* ── Main Layout ──────────────────────────────────────── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 34px 20px 52px;
+    }
+
+    /* ── Cards Row ────────────────────────────────────────── */
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 750px) {
+      .cards-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── Card ─────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      border-top: 4px solid transparent;
+      transition: transform .18s cubic-bezier(.34,1.56,.64,1),
+                  box-shadow .18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(11,31,69,.14);
+    }
+
+    /* Per-card accent top borders & icon backgrounds */
+    .card:nth-child(1) { border-top-color: var(--blue); }
+    .card:nth-child(2) { border-top-color: var(--teal); }
+    .card:nth-child(3) { border-top-color: var(--purple); }
+
+    .card-icon {
+      font-size: 1.7rem;
+      margin-bottom: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+    }
+
+    .card:nth-child(1) .card-icon { background: var(--blue-light); }
+    .card:nth-child(2) .card-icon { background: var(--teal-light); }
+    .card:nth-child(3) .card-icon { background: var(--purple-light); }
+
+    .card-title {
+      font-size: .73rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      margin-top: 12px;
+    }
+
+    .card:nth-child(1) .card-title { color: var(--blue); }
+    .card:nth-child(2) .card-title { color: var(--teal); }
+    .card:nth-child(3) .card-title { color: var(--purple); }
+
+    .card-headline {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .card-headline span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .card-sub {
+      margin-top: 10px;
+      font-size: .85rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .card-sub strong { color: var(--text); }
+
+    /* ── Progress Bar ─────────────────────────────────────── */
+    .progress-wrap { margin-top: 16px; }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: .78rem;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 9px;
+      background: #dde3ee;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+      transition: width .4s cubic-bezier(.4,0,.2,1);
+    }
+
+    .progress-fill.blue   { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+    .progress-fill.green  { background: linear-gradient(90deg, #16a34a, #4ade80); }
+    .progress-fill.teal   { background: linear-gradient(90deg, #0ea5a0, #5eead4); }
+    .progress-fill.yellow { background: linear-gradient(90deg, #d97706, #fbbf24); }
+    .progress-fill.purple { background: linear-gradient(90deg, #7c3aed, #c084fc); }
+
+    /* ── Badge ────────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .4px;
+      margin-bottom: 10px;
+    }
+
+    .badge.yellow { background: var(--amber-light); color: var(--amber); border: 1.5px solid #fbbf24; }
+    .badge.green  { background: var(--green-light);  color: var(--green); border: 1.5px solid #4ade80; }
+
+    /* ── Workshop detail rows ─────────────────────────────── */
+    .detail-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .88rem;
+      color: var(--muted);
+      margin-top: 7px;
+    }
+
+    .detail-row .icon { font-size: 1rem; }
+    .detail-row strong { color: var(--text); }
+
+    /* ── Divider ──────────────────────────────────────────── */
+    .card-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 14px 0;
+    }
+
+    /* ── Section Heading ──────────────────────────────────── */
+    .section-heading {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    /* ── Checklist Card ───────────────────────────────────── */
+    .checklist-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      border-top: 4px solid var(--green);
+    }
+
+    .checklist-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .checklist-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checklist-header-left h2 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .checklist-counter {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--green);
+      background: var(--green-light);
+      border: 1.5px solid #4ade80;
+      border-radius: 99px;
+      padding: 2px 11px;
+      white-space: nowrap;
+    }
+
+    .checklist-progress-wrap { width: 180px; }
+
+    @media (max-width: 500px) {
+      .checklist-progress-wrap { width: 100%; }
+    }
+
+    /* ── Checklist Items ──────────────────────────────────── */
+    .checklist-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* ── Haptic checkbox label ────────────────────────────── */
+    .checklist-list li label {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 10px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: .92rem;
+      color: var(--text);
+      border: 1.5px solid transparent;
+      background: #f8fafc;
+      transition: background .12s, border-color .12s,
+                  transform .1s cubic-bezier(.34,1.56,.64,1),
+                  box-shadow .1s ease;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .checklist-list li label:hover {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      box-shadow: 0 2px 8px rgba(37,99,235,.10);
+    }
+
+    /* Pressed / active haptic feel */
+    .checklist-list li label:active {
+      transform: scale(0.975);
+      box-shadow: 0 1px 3px rgba(37,99,235,.08);
+    }
+
+    /* Custom haptic checkbox ──────────────────────────────── */
+    .checklist-list li input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #94a3b8;
+      border-radius: 6px;
+      background: #fff;
+      flex-shrink: 0;
+      cursor: pointer;
+      position: relative;
+      transition: background .15s, border-color .15s,
+                  transform .12s cubic-bezier(.34,1.56,.64,1),
+                  box-shadow .12s ease;
+    }
+
+    .checklist-list li input[type="checkbox"]:hover {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(22,163,74,.15);
+    }
+
+    .checklist-list li input[type="checkbox"]:active {
+      transform: scale(0.82);
+    }
+
+    .checklist-list li input[type="checkbox"]:checked {
+      background: var(--green);
+      border-color: var(--green);
+      transform: scale(1.08);
+      box-shadow: 0 0 0 3px rgba(22,163,74,.2);
+    }
+
+    /* Checkmark via pseudo-element */
+    .checklist-list li input[type="checkbox"]:checked::after {
+      content: '';
+      display: block;
+      width: 5px;
+      height: 9px;
+      border: 2.5px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(42deg) translate(3px, 1px);
+    }
+
+    /* Bounce animation on check */
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.22); }
+      70%  { transform: scale(0.92); }
+      100% { transform: scale(1.08); }
+    }
+
+    .checklist-list li input[type="checkbox"]:checked {
+      animation: pop .28s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    /* Row bounce on check */
+    @keyframes rowPop {
+      0%   { transform: translateX(0); }
+      30%  { transform: translateX(5px); }
+      60%  { transform: translateX(-2px); }
+      100% { transform: translateX(0); }
+    }
+
+    .checklist-list li.just-checked label {
+      animation: rowPop .22s ease;
+    }
+
+    /* Done state */
+    .checklist-list li.done label {
+      color: var(--muted);
+      text-decoration: line-through;
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ──────────────────────────────────────────── -->
+  <header>
+    <div class="header-left">
+      <h1>MY TVET Dashboard</h1>
+      <p>Student Workshop Management Overview</p>
+    </div>
+    <div class="header-right">
+      <div class="date-label">Today</div>
+      <div class="date-value" id="today-date">—</div>
+    </div>
+  </header>
+
+  <!-- ── Main ────────────────────────────────────────────── -->
+  <main>
+
+    <!-- Cards Row -->
+    <div class="cards-row">
+
+      <!-- Card 1 — Students Registered -->
+      <div class="card">
+        <div class="card-icon">🎓</div>
+        <div class="card-title">Students Registered</div>
+        <div class="card-headline">34 <span>/ 40</span></div>
+        <div class="card-sub">
+          <div><strong>28</strong> confirmed &nbsp;·&nbsp; <strong>6</strong> pending</div>
+          <div>6 seats still available</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span>Registration fill</span>
+            <span>85%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill blue" style="width:85%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Tasks Remaining -->
+      <div class="card">
+        <div class="card-icon">✅</div>
+        <div class="card-title">Tasks Remaining</div>
+        <div class="card-headline">4 <span>remaining</span></div>
+        <div class="card-sub">
+          <div><strong>8</strong> complete &nbsp;·&nbsp; <strong>12</strong> total</div>
+          <div>Workshop is 67% ready</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span>Completion</span>
+            <span id="task-pct">67%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill teal" id="task-bar" style="width:67%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 — Workshop Status -->
+      <div class="card">
+        <div class="card-icon">🏷️</div>
+        <div class="card-title">Workshop Status</div>
+        <span class="badge yellow" id="status-badge">In Preparation</span>
+        <hr class="card-divider" />
+        <div class="detail-row">
+          <span class="icon">📅</span>
+          <span>Date: <strong>25 July 2025</strong></span>
+        </div>
+        <div class="detail-row">
+          <span class="icon">⏳</span>
+          <span>Days away: <strong id="days-away">—</strong></span>
+        </div>
+        <div class="detail-row">
+          <span class="icon">📋</span>
+          <span>Sessions planned: <strong>3</strong></span>
+        </div>
+        <div class="detail-row">
+          <span class="icon">👤</span>
+          <span>Facilitator: <strong>Ms. Rahel Tesfaye</strong></span>
+        </div>
+      </div>
+
+    </div><!-- /.cards-row -->
+
+    <!-- Preparation Checklist -->
+    <div class="checklist-card">
+      <div class="checklist-header">
+        <div class="checklist-header-left">
+          <h2>📋 Preparation Checklist</h2>
+          <span class="checklist-counter" id="check-count">8 of 12 tasks complete</span>
+        </div>
+        <div class="checklist-progress-wrap">
+          <div class="progress-meta">
+            <span></span>
+            <span id="check-pct">67%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill green" id="check-bar" style="width:67%"></div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="checklist-list" id="checklist">
+        <li class="done"><label><input type="checkbox" checked /> Send confirmation emails to all registered students</label></li>
+        <li class="done"><label><input type="checkbox" checked /> Book and confirm the venue / lab</label></li>
+        <li class="done"><label><input type="checkbox" checked /> Upload all exercise materials to shared folder</label></li>
+        <li class="done"><label><input type="checkbox" checked /> Test all tools and environments students will use</label></li>
+        <li class="done"><label><input type="checkbox" checked /> Assign a TA or helper for each session block</label></li>
+        <li class="done"><label><input type="checkbox" checked /> Prepare printed handouts for Day 1</label></li>
+        <li class="done"><label><input type="checkbox" checked /> Set up attendance tracking sheet</label></li>
+        <li class="done"><label><input type="checkbox" checked /> Confirm catering / refreshments</label></li>
+        <li><label><input type="checkbox" /> Brief all facilitators on the schedule</label></li>
+        <li><label><input type="checkbox" /> Test the projector and audio in the room</label></li>
+        <li><label><input type="checkbox" /> Send a reminder SMS/email 48 hours before</label></li>
+        <li><label><input type="checkbox" /> Prepare a backup plan for no-shows</label></li>
+      </ul>
+    </div>
+
+  </main>
+
+  <script>
+    // ── Today's date ─────────────────────────────────────────
+    const today = new Date();
+    document.getElementById('today-date').textContent = today.toLocaleDateString('en-GB', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    });
+
+    // ── Days until workshop ───────────────────────────────────
+    const workshopDate = new Date('2025-07-25');
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const daysAway = Math.ceil((workshopDate - new Date(today.getFullYear(), today.getMonth(), today.getDate())) / msPerDay);
+    const daysEl = document.getElementById('days-away');
+    if (daysAway > 0) {
+      daysEl.textContent = daysAway + ' day' + (daysAway !== 1 ? 's' : '');
+    } else if (daysAway === 0) {
+      daysEl.textContent = 'Today!';
+    } else {
+      daysEl.textContent = Math.abs(daysAway) + ' days ago';
+    }
+
+    // ── Checklist live update ─────────────────────────────────
+    const TOTAL = 12;
+
+    function updateChecklist() {
+      const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+      let done = 0;
+
+      checkboxes.forEach((cb, i) => {
+        const li = cb.closest('li');
+        if (cb.checked) {
+          done++;
+          li.classList.add('done');
+        } else {
+          li.classList.remove('done');
+        }
+      });
+
+      const pct = Math.round((done / TOTAL) * 100);
+
+      document.getElementById('check-count').textContent = done + ' of ' + TOTAL + ' tasks complete';
+      document.getElementById('check-pct').textContent   = pct + '%';
+      document.getElementById('check-bar').style.width   = pct + '%';
+
+      // Sync Tasks Remaining card
+      const remaining = TOTAL - done;
+      document.querySelector('.card:nth-child(2) .card-headline').innerHTML =
+        remaining + ' <span>remaining</span>';
+      document.querySelector('.card:nth-child(2) .card-sub').innerHTML =
+        '<div><strong>' + done + '</strong> complete &nbsp;·&nbsp; <strong>' + TOTAL + '</strong> total</div>' +
+        '<div>Workshop is ' + pct + '% ready</div>';
+      document.getElementById('task-pct').textContent  = pct + '%';
+      document.getElementById('task-bar').style.width  = pct + '%';
+
+      // Flip Workshop Status badge when all done
+      const badge = document.getElementById('status-badge');
+      if (done === TOTAL) {
+        badge.textContent = 'Ready';
+        badge.className   = 'badge green';
+      } else {
+        badge.textContent = 'In Preparation';
+        badge.className   = 'badge yellow';
+      }
+    }
+
+    // Attach listeners with row-bounce haptic effect
+    document.querySelectorAll('#checklist input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', function() {
+        const li = this.closest('li');
+        li.classList.remove('just-checked');
+        // Force reflow to restart animation
+        void li.offsetWidth;
+        li.classList.add('just-checked');
+        li.addEventListener('animationend', () => li.classList.remove('just-checked'), { once: true });
+        updateChecklist();
+      });
+    });
+
+    // Initialize
+    updateChecklist();
+  </script>
+
+</body>
+</html>
